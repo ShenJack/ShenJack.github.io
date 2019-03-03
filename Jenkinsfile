@@ -1,14 +1,6 @@
-pipeline {
-  agent any
-  options {
-    enforceBuildSchedule()
-  }
-
-  stages {
-    stage('Do some stuff') {
-      steps {
-        echo 'this can wait til morning'
-      }
-    }
+node {
+  properties([enforceBuildSchedule()])
+  stage('Do some stuff') {
+    echo 'this can wait til morning'
   }
 }
