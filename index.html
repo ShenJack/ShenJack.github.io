@@ -1,0 +1,31 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>RhythmHunt</title>
+    <style>
+        video{
+        }
+    </style>
+
+</head>
+<body>
+<video id="video" controls="controls" autoplay="autoplay" loop poster="https://luckhunt-blog.oss-cn-beijing.aliyuncs.com/472309f7905298225b97067adcca7bcb0b46d4e6.jfif">
+    <source src="https://rythm-hunt.oss-cn-beijing.aliyuncs.com/05%20%E5%A4%A7%E9%A2%A8%E5%90%B9.m4a?nsukey=BlPprFHUGB0oX3CfU7deuMFjDTF7k8FukPy2iZPGaRfq3PwXSjwzm7tqbJ7MctQs0r6bIdzEAZxBgz9KdaZo6xw%2FgQBFtuu70JZ0EHNQuvg0ql%2BUka3NfMzgfY%2B9CWZMugGR6hKjcx7SWZSwiTfXNOOCEI%2F6on%2BpndEyqmCcUSkAc7oWWR58HVktKqv8ZFU5SOxmv1IdJ1%2FBqDygzMu2Gw%3D%3D"
+            type="audio/x-m4a">
+</video>
+<button id="playButton" onclick="play()">play</button>
+</body>
+<script>
+    var isChrome = window.navigator.userAgent.indexOf("Chrome");
+    if(!isChrome){
+        play()
+    }
+    function play() {
+        document.getElementById('video').play()
+    }
+</script>
+</html>
