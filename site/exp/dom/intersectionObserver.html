@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Intersection Observer</title>
+    <style>
+        body {
+            height: 1000px;
+        }
+
+        #scrollArea {
+            height: 200px;
+            width: 100%;
+            margin-top: 200px;
+            margin-bottom: 200px;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+<div id="scrollArea">
+
+</div>
+</body>
+<script>
+    let options = {
+        rootMargin: '0px',
+        threshold: 0.1
+    }
+
+    let callback = (entries, observer) => {
+        console.log(entries)
+        entries.forEach(entry => {
+            // Each entry describes an intersection change for one observed
+            // target element:
+            //   entry.boundingClientRect
+            //   entry.intersectionRatio
+            //   entry.intersectionRect
+            //   entry.isIntersecting
+            //   entry.rootBounds
+            //   entry.target
+            //   entry.time
+        });
+    };
+
+    let observer = new IntersectionObserver(callback, options);
+    observer.observe(document.querySelector('#scrollArea'))
+</script>
+</html>

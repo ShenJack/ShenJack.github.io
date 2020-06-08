@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        #target {
+            position: absolute;
+            height: 100px;
+            width: 100px;
+            left: 0;
+            background: aquamarine;
+        }
+    </style>
+</head>
+<body>
+<div id="target">
+    Target
+</div>
+<script>
+    let target = document.getElementById("target")
+    let left = 0;
+
+    function paint() {
+        left++;
+        target.style.left = left + 'px';
+        requestHostCallbackWithWindow(paint)
+    }
+
+    let frameId = 0;
+    let isNewFrame = true;
+
+    function checkNewFrame() {
+        frameId++;
+        isNewFrame = true;
+        requestAnimationFrame(checkNewFrame)
+    }
+
+    let scheduledHostCallback;
+
+    const channel = new MessageChannel();
+    const port = channel.port2;
+    channel.port1.onmessage = function () {
+        if (isNewFrame) {
+            scheduledHostCallback();
+            isNewFrame = false;
+        } else {
+            requestHostCallback(scheduledHostCallback)
+        }
+    };
+
+    function requestHostCallback(callback) {
+        scheduledHostCallback = callback;
+        port.postMessage(null);
+    };
+
+
+    window.addEventListener("message", receiveMessage, false);
+
+    function receiveMessage() {
+        scheduledHostCallback();
+    }
+
+    function requestHostCallbackWithWindow(callback) {
+        scheduledHostCallback = callback;
+        window.postMessage("requestHostCallbackWithWindow", "*");
+    }
+
+    let targetX = 0;
+    performance.mark('costlyFunction Start')
+
+
+    setTimeout(() => {
+        performance.mark('costlyFunction End')
+
+        performance.measure(
+            'costlyFunction',
+            'costlyFunction Start',
+            'costlyFunction End'
+        )
+    }, 1000)
+
+    checkNewFrame();
+    paint()
+
+</script>
+</body>
+</html>

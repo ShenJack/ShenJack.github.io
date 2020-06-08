@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .list {
+            margin: 24px 0;
+        }
+
+        .child {
+            display: flex;
+            margin: 5px 14px;
+        }
+
+        .content {
+            width: 200px;
+            animation: change 400ms;
+        }
+
+        @keyframes change {
+            from {
+                background: #d5d5d5;
+            }
+
+            to {
+                background: white;
+            }
+        }
+
+        .update-count {
+            width: 40px;
+            margin-left: 5px;
+            color: gray;
+            animation: change 200ms;
+            white-space: nowrap;
+        }
+
+        button {
+            margin: 3px 6px;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/babel">
+    let {useState, useEffect, useCallback, useRef, memo} = React;
+
+    let modes = ['random', 'default(index)', 'id'];
+
+    const Child = memo(props => {
+            let [count, setCount] = useState(0)
+            useEffect(() => {
+                setCount(count => count + 1)
+            }, [props])
+            useEffect(() => {
+                sleep(10);
+            }, [])
+            return <div className="child">
+                <div className="content">
+                    {props.content}
+                </div>
+                <div className="update-count">
+                    {count}
+                </div>
+            </div>
+        }
+    )
+
+    function getRandomList(originArray) {
+        if (!originArray.length) {
+            return new Array(10).fill(1).map((item, index) => makeItem(index))
+        } else {
+            return originArray.map((item, index) => (Math.random() < 0.5 ? makeItem(Math.random()) : makeItem(item.id)))
+        }
+    }
+
+    function makeItem(id) {
+        return {
+            id,
+            content: `${id}`
+        }
+    }
+
+    function sleep(time) {
+        let start = Date.now();
+        while (Date.now() - start < time) {
+
+        }
+    }
+
+
+    let startTime = 0;
+    let timeout = 400;
+
+    function app() {
+        let [delta, setDelta] = useState(0)
+        let [totalTime, setTotalTime] = useState(0)
+        let [updateCount, setUpdateCount] = useState(0)
+        let [list, setList] = useState([])
+        let [modeIndex, setModeIndex] = useState(1)
+        let pause = useRef(false)
+
+        useEffect(() => {
+            updateList();
+        }, [])
+        let updateList = (() => {
+            startTime = (Date.now())
+            setList(list => getRandomList(list).sort(item => Math.random() - 0.5))
+            //render start
+            setTimeout(() => {
+                let now = Date.now()
+                if (!pause.current) {
+                    setTimeout(updateList, timeout)
+                }
+                let timeDelta = now - startTime;
+                setUpdateCount(p => p + 1);
+                setDelta(timeDelta);
+                setTotalTime(totalTime => totalTime + timeDelta);
+            })
+        })
+
+        let next = () => {
+            updateList();
+        }
+        return <div className="app">
+            <p>delta:{delta}</p>
+            <p>average {totalTime / updateCount}</p>
+            <p>updateCount:{updateCount}</p>
+            <div className="list">
+                <div className="child">
+                    <div className="content">
+                        'id'
+                    </div>
+                    <div className="update-count">
+                        'render count'
+                    </div>
+                </div>
+                {modeIndex === 0 && <>
+                    {list.map((item, index) => <Child key={Math.random()} content={item.content}/>)}
+                </>}
+                {modeIndex === 1 && <>
+                    {list.map((item, index) => <Child key={index} content={item.content}/>)}
+                </>}
+                {modeIndex === 2 && <>
+                    {list.map((item, index) => <Child key={item.id} content={item.content}/>)}
+                </>}
+            </div>
+            <button onClick={() => {
+                if (pause.current) {
+                    updateList();
+                }
+                pause.current = !pause.current;
+            }}>toggle:{pause.current ? 'pause' : 'running'}</button>
+            <button
+                onClick={() => setModeIndex((modeIndex + 1) % modes.length)}>toggleKeyMode:{modes[modeIndex]}</button>
+            <button onClick={() => next()} disabled={!pause.current}>next</button>
+        </div>
+    }
+
+    ReactDOM.render(React.createElement(app), document.getElementById('app'))
+</script>
+<script>
+
+
+</script>
+</body>
+</html>
