@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport"
+        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Vue List</title>
+  <script src="../../dist/vue.js"></script>
+</head>
+<body>
+<div id="app">
+  <p>Delta {{timeDelta}}</p>
+  <p>Average {{totalTime/updateCount}}</p>
+  <p>UpdateCount {{updateCount}}</p>
+  <div class="list">
+    <template v-for="(item,index) in list">
+      <template v-if="modeIndex === 0">
+        <child :key="Math.random()" :content="item.content"/>
+      </template>
+      <template v-if="modeIndex === 2">
+        <child :key="item.id" :content="item.content"/>
+      </template>
+      <template v-if="modeIndex === 1">
+        <child :content="item.content"/>
+      </template>
+    </template>
+  </div>
+  <button @click="toggle()">toggle:{{pause}}</button>
+  <button @click="toggleKeyMode()">toggleMode:{{modes[modeIndex]}}</button>
+  <button @click="next()">next</button>
+<!--  <button @click="log()">log</button>-->
+</div>
+<script src="./app.js"></script>
+</body>
+</html>
