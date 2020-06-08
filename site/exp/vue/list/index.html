@@ -7,22 +7,68 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Vue List</title>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.min.js"></script>
+  <style>
+    .list {
+      margin: 24px 0;
+    }
+
+    .child {
+      display: flex;
+      margin: 5px 14px;
+    }
+
+    .content {
+      width: 200px;
+      animation: change 200ms;
+    }
+
+    @keyframes change {
+      from {
+        background: #d5d5d5;
+      }
+
+      to {
+        background: white;
+      }
+    }
+
+    .update-count {
+      width: 40px;
+      margin-left: 5px;
+      color: gray;
+      animation: change 200ms;
+      white-space: nowrap;
+    }
+
+    button {
+      margin: 3px 6px;
+    }
+  </style>
 </head>
 <body>
 <div id="app">
-  <p>Delta {{timeDelta}}</p>
-  <p>Average {{totalTime/updateCount}}</p>
-  <p>UpdateCount {{updateCount}}</p>
+  <h2>Vue List with Key</h2>
+  <p>Delta  {{timeDelta}} ms</p>
+  <p>Average  {{totalTime/updateCount}} ms</p>
+  <p>UpdateCount  {{updateCount}} times</p>
   <div class="list">
+    <div class="child">
+      <div class="content">
+        'id'
+      </div>
+      <div class="update-count">
+        'render count'
+      </div>
+    </div>
     <template v-for="(item,index) in list">
-      <template v-if="modeIndex === 0">
-        <child :key="Math.random()" :content="item.content"/>
+      <template v-if="modes[modeIndex] === 'random'">
+        <Child :key="Math.random()" :content="item.content"></Child>
       </template>
-      <template v-if="modeIndex === 2">
-        <child :key="item.id" :content="item.content"/>
+      <template v-if="modes[modeIndex] === 'id'">
+        <Child :key="item.id" :content="item.content"></Child>
       </template>
-      <template v-if="modeIndex === 1">
-        <child :content="item.content"/>
+      <template v-if="modes[modeIndex] === 'default(index)'">
+        <Child :key="index" :content="item.content"></Child>
       </template>
     </template>
   </div>

@@ -21,7 +21,7 @@
 
         .content {
             width: 200px;
-            animation: change 400ms;
+            animation: change 200ms;
         }
 
         @keyframes change {
@@ -112,7 +112,7 @@
         }, [])
         let updateList = (() => {
             startTime = (Date.now())
-            setList(list => getRandomList(list).sort(item => Math.random() - 0.5))
+            setList(list => getRandomList(list))
             //render start
             setTimeout(() => {
                 let now = Date.now()
@@ -130,26 +130,27 @@
             updateList();
         }
         return <div className="app">
-            <p>delta:{delta}</p>
-            <p>average {totalTime / updateCount}</p>
-            <p>updateCount:{updateCount}</p>
+            <h2>React List with Key</h2>
+            <p>Delta {delta} ms</p>
+            <p>Average {totalTime / updateCount} ms</p>
+            <p>UpdateCount {updateCount} times</p>
             <div className="list">
                 <div className="child">
                     <div className="content">
-                        'id'
+                        <strong>id</strong>
                     </div>
                     <div className="update-count">
-                        'render count'
+                        <strong>render count</strong>
                     </div>
                 </div>
-                {modeIndex === 0 && <>
+                {modes[modeIndex] === 'random' && <>
                     {list.map((item, index) => <Child key={Math.random()} content={item.content}/>)}
                 </>}
-                {modeIndex === 1 && <>
-                    {list.map((item, index) => <Child key={index} content={item.content}/>)}
-                </>}
-                {modeIndex === 2 && <>
+                {modes[modeIndex] === 'id' && <>
                     {list.map((item, index) => <Child key={item.id} content={item.content}/>)}
+                </>}
+                {modes[modeIndex] === 'default(index)' && <>
+                    {list.map((item, index) => <Child key={index} content={item.content}/>)}
                 </>}
             </div>
             <button onClick={() => {
@@ -165,10 +166,6 @@
     }
 
     ReactDOM.render(React.createElement(app), document.getElementById('app'))
-</script>
-<script>
-
-
 </script>
 </body>
 </html>
