@@ -26,7 +26,7 @@ new Vue({
       if (!originArray.length) {
         return new Array(10).fill(1).map((item, index) => makeItem(index))
       } else {
-        return originArray.map((item, index) => (Math.random() < 0.1 ? makeItem(Math.random()) : makeItem(item.id)))
+        return originArray.map((item, index) => (Math.random() < 0.5 ? makeItem(Math.random()) : makeItem(item.id)))
       }
     },
     next() {

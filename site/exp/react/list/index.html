@@ -143,15 +143,12 @@
                         <strong>render count</strong>
                     </div>
                 </div>
-                {modes[modeIndex] === 'random' && <>
-                    {list.map((item, index) => <Child key={Math.random()} content={item.content}/>)}
-                </>}
-                {modes[modeIndex] === 'id' && <>
-                    {list.map((item, index) => <Child key={item.id} content={item.content}/>)}
-                </>}
-                {modes[modeIndex] === 'default(index)' && <>
-                    {list.map((item, index) => <Child key={index} content={item.content}/>)}
-                </>}
+                {modes[modeIndex] === 'random' &&
+                    list.map((item, index) => <Child key={Math.random()} content={item.content}/>)}
+                {modes[modeIndex] === 'id' &&
+                    list.map((item, index) => <Child key={item.id} content={item.content}/>)}
+                {modes[modeIndex] === 'default(index)' &&
+                    list.map((item, index) => <Child content={item.content}/>)}
             </div>
             <button onClick={() => {
                 if (pause.current) {
