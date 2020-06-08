@@ -45,7 +45,7 @@ new Vue({
     updateList() {
       let now = Date.now()
       this.lastTime = now;
-      this.list = this.getRandomList(this.list);
+      this.list = this.getRandomList(this.list).sort(item => Math.random() - 0.5);
       setTimeout(() => {
         let now = Date.now()
         if (!this.pause) {
