@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>React Memo</title>
+    <script src="../fiber/react.development.js"></script>
+    <script src="../fiber/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .child-container {
+            display: flex;
+            padding: 24px;
+        }
+
+        .child-container > div {
+            border: 1px black dashed;
+            padding: 24px;
+            margin: 12px;
+        }
+
+        .count-wrapper .count {
+            color: deepskyblue;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/babel">
+    let {useState, useEffect, useCallback, useRef, memo} = React;
+    let memorizedChildRenderCount = 0;
+    let childRenderCount = 0;
+
+    window.countWrapper = 0;
+    window.countWrappers = [];
+    window.UpdateCountWrapper = function UpdateCountWrapper(component) {
+        let count = 0;
+        return function (props) {
+            count++;
+            return <div className="count-wrapper">
+                <div className="count">
+                    {count}
+                </div>
+                {component(props)}
+            </div>
+        };
+    }
+
+
+    class FunctionalChild extends React.Component {
+        count = 0;
+        constructor(props) {
+            super(props);
+        }
+
+        render() {
+            this.count++;
+            return (
+                <div className="child">
+                    <p>Child {this.props.id} </p>
+                    <p>Render <span style={{color: 'blue'}}>
+                {this.count}
+            </span> times</p>
+                </div>
+            );
+        }
+    }
+
+    const MemorizedChildFunction = React.memo(FunctionalChild)
+
+
+    const WrappedComponent = FunctionalChild
+
+    function makeContent(content) {
+        let res = Math.random() > 0.5 ? content : !content;
+        return res;
+    }
+
+    function App() {
+        let content = useRef(0);
+        content.current = Math.random() > 0.5 ? content.current + 1 : content.current;
+        return <div className="app">
+            <h1>React.memo</h1>
+            <div className="child-container">
+                <MemorizedChildFunction id="Memorized" content={content.current}/>
+                <FunctionalChild id="Simple" content={content.current}/>
+                <WrappedComponent id="Simple + Wrapped" content={content.current}/>
+            </div>
+        </div>
+    }
+
+    function sleep(duration) {
+        let start = performance.now();
+        while (performance.now() - start < duration) {
+
+        }
+    }
+
+
+    function Container() {
+        let [content, setContent] = useState(false);
+        console.log('update container')
+        useEffect(() => {
+            setInterval(() => {
+                setContent(value => !value);
+            }, 100)
+        }, [])
+        return (<div>
+            <App/>
+        </div>)
+    }
+
+
+    ReactDOM.render(<Container/>, document.getElementById('app'))
+</script>
+</body>
+</html>

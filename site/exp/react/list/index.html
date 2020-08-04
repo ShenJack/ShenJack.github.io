@@ -63,6 +63,19 @@
 <body>
 <div id="app"></div>
 <script type="text/babel">
+    window.UpdateCountWrapper = function UpdateCountWrapper(component) {
+        let count = 0;
+        return function (props) {
+            count++;
+            return <div className="count-wrapper">
+                <div className="count">
+                    {count}
+                </div>
+                {component(props)}
+            </div>
+        };
+    }
+
     let lastList = new Array(10).fill(1).map((item, index) => makeItem(index));
 
 
@@ -226,6 +239,7 @@
     }
 
     ReactDOM.render(React.createElement(app), document.getElementById('app'))
+
 </script>
 </body>
 </html>

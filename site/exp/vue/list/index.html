@@ -51,6 +51,18 @@
   <p>Delta  {{timeDelta}} ms</p>
   <p>Average  {{totalTime/updateCount}} ms</p>
   <p>UpdateCount  {{updateCount}} times</p>
+  <template>
+    <parent :data="data">
+      <middle :sub-data="data">
+        <child></child>
+        <child></child>
+      </middle>
+      <middle>
+        <child></child>
+        <child></child>
+      </middle>
+    </parent>
+  </template>
   <div class="list">
     <div class="child">
       <div class="content">

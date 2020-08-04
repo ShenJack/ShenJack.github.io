@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>ComponentSpiltForFiber</title>
+    <script src="react.development.js"></script>
+    <script src="react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style>
+        .child-container {
+            display: flex;
+            padding: 24px;
+        }
+
+        .child-container > div {
+            border: 1px black dashed;
+            padding: 24px;
+            margin: 12px;
+        }
+
+        .count-wrapper .count {
+            color: deepskyblue;
+        }
+    </style>
+</head>
+<body>
+<div id="app"></div>
+<script type="text/babel">
+    let {useState, useEffect, useCallback, useRef, memo} = React;
+
+    function Child({index}) {
+        sleep(1);
+        return <div className="child">
+            <p>Child {index} </p>
+        </div>
+    }
+
+    // let Child = memo(child)
+
+    function App() {
+        let [content, setContent] = useState(false);
+        console.log('update container')
+        useEffect(() => {
+            requestAnimation(() => setContent(value => !value))
+        }, [])
+        return <div className="app">
+            {Array(50).fill(1).map((item, index) => <Child index={index} key={index}/>)}
+        </div>
+    }
+
+    function sleep(duration) {
+        let start = performance.now();
+        while (performance.now() - start < duration) {
+
+        }
+    }
+
+    function Container() {
+        return (<div>
+            <input/>
+            <App/>
+        </div>)
+    }
+
+
+    let lastTime = performance.now();
+
+    function requestAnimation(callback) {
+        setTimeout(() => {
+            let now = performance.now();
+            console.log(now - lastTime);
+            lastTime = now;
+            callback();
+            requestAnimation(callback);
+        })
+    }
+
+    ReactDOM.render(<Container/>, document.getElementById('app'))
+
+
+</script>
+</body>
+</html>
