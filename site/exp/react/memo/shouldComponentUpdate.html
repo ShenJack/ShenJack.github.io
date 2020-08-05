@@ -34,22 +34,6 @@
     let memorizedChildRenderCount = 0;
     let childRenderCount = 0;
 
-    window.countWrapper = 0;
-    window.countWrappers = [];
-    window.UpdateCountWrapper = function UpdateCountWrapper(component) {
-        let count = 0;
-        return function (props) {
-            count++;
-            return <div className="count-wrapper">
-                <div className="count">
-                    {count}
-                </div>
-                {component(props)}
-            </div>
-        };
-    }
-
-
     class ClassChild extends React.Component {
         count = 0;
 
