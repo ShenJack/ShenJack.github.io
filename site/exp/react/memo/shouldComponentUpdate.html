@@ -9,6 +9,7 @@
     <script src="../fiber/react.development.js"></script>
     <script src="../fiber/react-dom.development.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <script src="https://raw.githubusercontent.com/lodash/lodash/4.17.15-npm/lodash.js"></script>
     <style>
         .child-container {
             display: flex;
@@ -49,10 +50,15 @@
     }
 
 
-    class FunctionalChild extends React.Component {
+    class ClassChild extends React.Component {
         count = 0;
+
         constructor(props) {
             super(props);
+        }
+
+        shouldComponentUpdate(nextProps, nextState) {
+            return true;
         }
 
         render() {
@@ -68,10 +74,30 @@
         }
     }
 
-    const MemorizedChildFunction = React.memo(FunctionalChild)
+    class ClassShouldUpdateChild extends React.Component {
+        count = 0;
 
+        constructor(props) {
+            super(props);
+        }
 
-    const WrappedComponent = FunctionalChild
+        shouldComponentUpdate(nextProps, nextState) {
+            return nextProps.someField !== this.props.someField;
+        }
+
+        render() {
+            this.count++;
+            return (
+                <div className="child">
+                    <p>Child {this.props.id} </p>
+                    <p>Render <span style={{color: 'blue'}}>
+                {this.count}
+            </span> times</p>
+                </div>
+            );
+        }
+    }
+
 
     function makeContent(content) {
         let res = Math.random() > 0.5 ? content : !content;
@@ -84,9 +110,8 @@
         return <div className="app">
             <h1>React.memo</h1>
             <div className="child-container">
-                <MemorizedChildFunction id="Memorized" content={content.current}/>
-                <FunctionalChild id="Simple" content={content.current}/>
-                <WrappedComponent id="Simple + Wrapped" content={content.current}/>
+                <ClassChild id="Always Return True" content={content.current}/>
+                <ClassShouldUpdateChild id="with ClassShouldUpdate" content={content.current}/>
             </div>
         </div>
     }
