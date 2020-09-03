@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>OffScreen Animation</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-content: center;
+            align-items: center;
+            position: relative;
+        }
+
+        .iterations{
+            margin-top: 400px;
+            text-align: center;
+        }
+
+        #count{
+            font-size: 30px;
+        }
+
+        .animation {
+            width: 8px;
+            height: 8px;
+            background: darkcyan;
+            animation: rotate360 100ms linear infinite;
+        }
+
+        .animation:not(:first-child) {
+            margin-top: 2px;
+        }
+
+        @keyframes rotate360 {
+            0% {
+                transform: rotate(0deg)
+            }
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        @keyframes scrollDown {
+            0% {
+                transform: rotate(0deg)
+            }
+            100% {
+                transform: rotate(360deg)
+            }
+        }
+
+        .prevent-animation {
+            animation: none;
+        }
+
+        .animation-group {
+            position: absolute;
+            top: -500px;
+            animation: scrollDown 3s linear infinite;
+        }
+    </style>
+    <script src="./polyfill.js"></script>
+    <script src="./preventOffscreenAnimation.js"></script>
+    <script src="./logicWithPolyFill.js"></script>
+</head>
+<body>
+<div class="animation-group">
+</div>
+<div class="iterations" >
+    animation iterations in 2 seconds
+    <div id="count">
+
+    </div>
+</div>
+
+</body>
+
+
+</html>
